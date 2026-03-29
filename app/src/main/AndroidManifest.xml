@@ -7,9 +7,11 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_app_logo"
         android:label="Local Tool Hub"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@drawable/ic_app_logo"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LocalToolHub">
+        android:theme="@style/Theme.LocalToolHub"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"

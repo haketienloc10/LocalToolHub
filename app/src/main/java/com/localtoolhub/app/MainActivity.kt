@@ -4,10 +4,12 @@ import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -19,6 +21,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.localtoolhub.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        private const val TAG = "LocalToolHub"
+    }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var drawerAdapter: DrawerAdapter
@@ -94,16 +100,41 @@ class MainActivity : AppCompatActivity() {
             override fun shouldOverrideUrlLoading(
                 view: WebView,
                 request: WebResourceRequest
-            ): Boolean = false
+            ): Boolean {
+                Log.d(TAG, "shouldOverrideUrlLoading: ${request.url}")
+                return false
+            }
 
             override fun onPageStarted(view: WebView, url: String?, favicon: Bitmap?) {
                 binding.progressBar.isVisible = true
+                showDebugMessage("Loading: $url")
+                Log.d(TAG, "onPageStarted: $url")
                 super.onPageStarted(view, url, favicon)
             }
 
             override fun onPageFinished(view: WebView, url: String?) {
                 binding.progressBar.isVisible = false
+                hideDebugMessage()
+                Log.d(TAG, "onPageFinished: $url")
                 super.onPageFinished(view, url)
+            }
+
+            override fun onReceivedError(
+                view: WebView,
+                request: WebResourceRequest,
+                error: WebResourceError
+            ) {
+                if (request.isForMainFrame) {
+                    binding.progressBar.isVisible = false
+                    showDebugMessage(
+                        "Load error\nURL: ${request.url}\nCode: ${error.errorCode}\nMessage: ${error.description}"
+                    )
+                    Log.e(
+                        TAG,
+                        "onReceivedError: url=${request.url}, code=${error.errorCode}, description=${error.description}"
+                    )
+                }
+                super.onReceivedError(view, request, error)
             }
         }
     }
@@ -152,5 +183,14 @@ class MainActivity : AppCompatActivity() {
         binding.drawerContainer.layoutParams = binding.drawerContainer.layoutParams.apply {
             width = minOf(targetWidth, maxWidth)
         }
+    }
+
+    private fun showDebugMessage(message: String) {
+        binding.debugMessageView.text = message
+        binding.debugMessageView.isVisible = true
+    }
+
+    private fun hideDebugMessage() {
+        binding.debugMessageView.isVisible = false
     }
 }
