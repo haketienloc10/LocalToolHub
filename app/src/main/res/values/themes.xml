@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <style name="Theme.LocalToolHub" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:statusBarColor">@color/app_background</item>
+        <item name="android:navigationBarColor">@color/app_background</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="23">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="27">false</item>
+        <item name="colorPrimary">@color/accent_primary</item>
+        <item name="colorOnPrimary">@color/text_primary</item>
+        <item name="colorSurface">@color/surface_primary</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="android:colorBackground">@color/app_background</item>
+        <item name="android:windowBackground">@color/app_background</item>
+    </style>
+
+    <style name="ThemeOverlay.LocalToolHub.Toolbar" parent="ThemeOverlay.Material3.Dark.ActionBar">
+        <item name="actionMenuTextColor">@color/text_primary</item>
+        <item name="colorControlNormal">@color/text_primary</item>
+    </style>
+</resources>
